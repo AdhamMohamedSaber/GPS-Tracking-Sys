@@ -12,7 +12,7 @@
 #endif
 #ifndef STRING_H
 #define STRING_H
-#endif STRING_H
+#endif
 
 //  LCD_DATA
 void Lcd_Data(char data)

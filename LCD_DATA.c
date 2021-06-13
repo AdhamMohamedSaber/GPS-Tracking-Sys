@@ -1,11 +1,15 @@
-#include <stdio.h>
-#include "tm4c123gh6pm.h"
-#include <math.h>
-#include <stdint.h>
-#define no_of_points 2
-#define M_PI 3.14159265358979323846
-#define rad 6371
-#include<string.h>
+#ifndef STDIO_H
+#define STDIO_H
+#endif
+#ifndef TM4C123GH6PM_H
+#define TM4C123GH6PM_H
+#endif
+#ifndef STDINT_H
+#define STDINT_H
+#endif
+#ifndef MATH_H
+#define MATH_H
+#endif
 
 //  LCD_DATA
 void Lcd_Data(char data)

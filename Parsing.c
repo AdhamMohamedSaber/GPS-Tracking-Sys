@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 void gps_data (char* data, double* lat, double* lon)
 	{
 		char cursor = '$';

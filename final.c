@@ -103,6 +103,11 @@ void gps_data (char * data, double * lat, double * lon)
 		char long_degree[4];
 		char lat_min[7];
 		char long_min[7];
+		const char *str;
+		const char *str1;
+		const char *str2;
+		const char *str3;
+		double x, y, z, a;
 
 		while (1)
 			{
@@ -131,17 +136,17 @@ void gps_data (char * data, double * lat, double * lon)
 					cursor = data[i];
 					i++;
 			}
-		const char *str = lat_degree;
-		double x = strtod (str, NULL);
+		str = lat_degree;
+		x = strtod (str, NULL);
 		//printf ("lat_degree = %f\n", x);
-		const char *str1 = long_degree;
-		double y = strtod (str1, NULL);
+		str1 = long_degree;
+		y = strtod (str1, NULL);
 		//printf ("long_degree = %f\n", y);
-		const char *str2 = lat_min;
-		double z = strtod (str2, NULL);
+		str2 = lat_min;
+		z = strtod (str2, NULL);
 		//printf ("lat_min = %f\n", z);
-		const char *str3 = long_min;
-		double a = strtod (str3, NULL);
+		str3 = long_min;
+		a = strtod (str3, NULL);
 		//printf ("long_min = %f\n", a);
   
 		*lat = z / (1000 * 60);
@@ -207,8 +212,17 @@ void PORTA_INIT(void)
   Lcd_command(0x38);
   delay_micro(40);
 }
+void LED_On(char data){
+	   GPIO_PORTF_DATA_R |= data;
+}
+void LED_Off(char data){
+	   GPIO_PORTF_DATA_R &= ~data;
+}
+//Led_On(0x04);
+//Led_Off(0x04);
 
-
+//Led_On(0x08);
+//Led_Off(0x08);
 
 int main (void)
 	{
@@ -229,8 +243,6 @@ int main (void)
 	PORTF_Int();
 	
   while(1) {
-		// LCD reading
-		for(i=0; i < no_of_points; i++){
 			UART2_GetData(data, len); //comment
 		  gps_data (data, &lat, &lon);
       if (prev_lat != 0 && prev_lon != 0)
@@ -268,7 +280,5 @@ int main (void)
 			Lcd_Data(buf[2]);
 			delay_milli(1);
 			delay_milli(500);
-    }
-	}
 	return 0;
 }

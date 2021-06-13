@@ -7,7 +7,6 @@
 #define rad 6371
 #include<string.h>
 
-//  LCD_DATA
 void Lcd_Data(char data){
 
 }

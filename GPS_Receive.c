@@ -46,23 +46,23 @@ char UART2_InChar(void) {
 		 return ((char) (UART2_DR_R & 0xFF));
 }
 
-/*void UART2_GetData(char *data, int len) {
+void UART2_GetData(char *data, int len) {
      char character;
 	   int i;
 	   for (i = 0; 1 < len; i++) {
 		     character = UART2_InChar();
 			   data[i] = character;
 		 }
-}*/
+}
 
 int main(){
-	//const int len = 9;
-	//char data[len] = {0};
+  const int len = 478;
+  char data[len] = {0};
 	
   UART0_Init();
   UART2_Init();
 	
-  while(1) UART0_OutChar(UART2_InChar());
+  //while(1) UART0_OutChar(UART2_InChar());
 	
-	//while(1) UART_GetData(data, len);
+  while(1) UART2_GetData(data, len);
 }

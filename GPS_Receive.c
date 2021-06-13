@@ -66,3 +66,4 @@ int main(){
 	
   while(1) UART2_GetData(data, len);
 }
+

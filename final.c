@@ -224,6 +224,9 @@ int main (void)
 	int i =0 ;
 	
   UART2_Init();
+	PORTA_INIT();
+	PORTB_INIT();
+	PORTF_Int();
 	
   while(1) {
 		// LCD reading

@@ -44,26 +44,26 @@ void gps_data (){
 
   const char *str = lat_degree;
   double x = strtod (str, NULL);
-  printf ("lat_degree = %f\n", x);
+  //printf ("lat_degree = %f\n", x);
   const char *str1 = long_degree;
   double y = strtod (str1, NULL);
-  printf ("long_degree = %f\n", y);
+  //printf ("long_degree = %f\n", y);
   const char *str2 = lat_min;
   double z = strtod (str2, NULL);
-  printf ("lat_min = %f\n", z);
+  //printf ("lat_min = %f\n", z);
   const char *str3 = long_min;
   double a = strtod (str3, NULL);
-  printf ("long_min = %f\n", a);
+  //printf ("long_min = %f\n", a);
   
   lat = z / (1000 * 60);
   lon = a / (1000 * 60);
   lat = lat + x ;
   lon = lon + y ;
-  printf("lat is %f\n ", lat);
-  printf("lon is %f\n ", lon);
+  //printf("lat is %f\n ", lat);
+  //printf("lon is %f\n ", lon);
 }
 
-int main ()
+/*int main ()
 {
   gps_data ();
-}
+}*/

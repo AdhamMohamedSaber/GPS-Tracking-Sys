@@ -8,7 +8,7 @@
 #include<string.h>
 
 static double haversine(double lat1, double lon1, double lat2, double lon2)
-    {
+	{
 				double a, c, z;
         // distance between latitudes
         // and longitudes
@@ -26,4 +26,4 @@ static double haversine(double lat1, double lon1, double lat2, double lon2)
 				z = rad* c* pow(10,3);
 				
 				return z;
-    }
+	}

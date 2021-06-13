@@ -11,15 +11,15 @@ void delay_milli(int n){
 		int i,j;
 		for(i=0;i<n;i++)
 			for(j=0;j<3180;j++){}
-}
+  }
 
 void delay_micro(int n){
 		int i,j;
 		for(i=0;i<n;i++)
 			for(j=0;j<3;j++){}
-}
-void PORTF_Int(void)
-{
+	}
+
+void PORTF_Int(void){
     SYSCTL_RCGCGPIO_R |= 0x20;
     while(!(SYSCTL_PRGPIO_R & 0x20));
     GPIO_PORTF_LOCK_R = 0x4C4F434B;
@@ -30,4 +30,4 @@ void PORTF_Int(void)
     GPIO_PORTF_AFSEL_R &= ~0x02;
     GPIO_PORTF_PCTL_R &= ~0xF0;
     GPIO_PORTF_DATA_R |= 0x02;
-}
+	}

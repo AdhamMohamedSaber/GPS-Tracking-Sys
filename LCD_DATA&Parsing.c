@@ -10,6 +10,9 @@
 #ifndef MATH_H
 #define MATH_H
 #endif
+#ifndef STRING_H
+#define STRING_H
+#endif STRING_H
 
 //  LCD_DATA
 void Lcd_Data(char data)

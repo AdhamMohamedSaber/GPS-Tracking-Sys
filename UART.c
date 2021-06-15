@@ -7,6 +7,29 @@
 #define rad 6371
 #include<string.h>
 
+
+void UART5_Init(void)
+	{
+    SYSCTL_RCGCUART_R |= 0x20;
+//    while((SYSCTL_PRUART_R & 0x20) == 0);
+    SYSCTL_RCGCGPIO_R |= 0x10;
+		while((SYSCTL_PRGPIO_R & 0x10) == 0){};
+		delay_milli(100);
+	
+//	  GPIO_PORTE_LOCK_R = 0x4C4F434B;    // PE4 RX and PE5 TX
+	  GPIO_PORTE_CR_R |= 0xFF;
+    GPIO_PORTE_AMSEL_R &= ~0x30;
+    GPIO_PORTE_AFSEL_R |= 0x30;
+    GPIO_PORTE_PCTL_R = (GPIO_PORTE_PCTL_R & 0xFF00FFFF) + 0x00110000;
+    GPIO_PORTE_DEN_R |= 0x30;
+    
+    UART5_CTL_R &= ~0x00000001;
+    UART5_IBRD_R = 104;
+    UART5_FBRD_R = 11;
+	  UART5_LCRH_R = (UART_LCRH_WLEN_8 | UART_LCRH_FEN);
+    UART5_CTL_R |= 0x00000301;
+	}
+
 void UART2_Init(void)
 	{
     SYSCTL_RCGCUART_R |= 0x04;

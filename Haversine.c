@@ -1,29 +1,34 @@
-#include <stdio.h>
-#include "tm4c123gh6pm.h"
-#include <math.h>
-#include <stdint.h>
-#define no_of_points 2
-#define M_PI 3.14159265358979323846
-#define rad 6371
-#include<string.h>
+double deg2rad(double);
+double rad2deg(double);
 
-static double haversine(double lat1, double lon1, double lat2, double lon2)
-	{
-				double a, c, z;
-        // distance between latitudes
-        // and longitudes
-        double dLat = (lat2 - lat1) * M_PI / 180.0;
-        double dLon = (lon2 - lon1) * M_PI / 180.0;
- 
-        // convert to radians
-        lat1 = (lat1) * M_PI / 180.0;
-        lat2 = (lat2) * M_PI / 180.0;
- 
-        // apply formulae
-        a = pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(lat1) * cos(lat2);
-        c = 2 * asin(sqrt(a));
-        
-				z = rad* c* pow(10,3);
-				
-				return z;
-	}
+double haversine (double lat1, double lon1, double lat2, double lon2, char unit) {
+  double theta, dist;
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+    return 0;
+  }
+  else {
+    theta = lon1 - lon2;
+    dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+    dist = acos(dist);
+    dist = rad2deg(dist);
+    dist = dist * 60 * 1.1515;
+    switch(unit) {
+      case 'M':
+        break;
+      case 'K':
+        dist = dist * 1.609344;
+        break;
+      case 'N':
+        dist = dist * 0.8684;
+        break;
+    }
+    return (dist * 1000);
+  }
+}
+
+double deg2rad(double deg) {
+  return (deg * M_PI / 180);
+}
+
+double rad2deg(double radi) {
+  return (radi * 180 / M_PI);}

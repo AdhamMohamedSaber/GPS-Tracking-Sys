@@ -30,6 +30,14 @@ void UART5_Init(void)
     UART5_CTL_R |= 0x00000301;
 	}
 
+char UART5_InChar(void)																																					// volatile
+	{                                              // 7    6    5     4
+     while ((UART5_FR_R & 0x00000010) != 0); 		// TXFE RXFF TXFF RXFE
+		//PORTF_Int();
+		return ((char) (UART5_DR_R & 0xFF));
+		
+	}
+
 void UART2_Init(void)
 	{
     SYSCTL_RCGCUART_R |= 0x04;

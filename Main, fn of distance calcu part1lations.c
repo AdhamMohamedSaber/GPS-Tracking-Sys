@@ -50,39 +50,4 @@ if (test_me == true)
       
       distancex = (int) distance ;
 			snprintf(buf, 4, "%d", distancex);
-			
-				Lcd_command (0x01); //Clear display
-				Lcd_Data(' ');
-				delay_milli(1);
-				Lcd_Data('D');
-				delay_milli(1);
-				Lcd_Data('I');
-				delay_milli(1);
-				Lcd_Data('S');
-				delay_milli(1);
-				Lcd_Data('T');
-				delay_milli(1);
-				Lcd_Data('.');
-				delay_milli(5);
-				delay_milli(1);
-				Lcd_Data(' ');
-				delay_milli(1);
-				Lcd_Data('=');
-				delay_milli(1);
-			
-	for(counter= 0; counter < 3; counter++){		
-			Lcd_Data(buf[counter]);
-			delay_milli(1);
-	}
-			Lcd_Data('m');
-			delay_milli(1);
-			Lcd_Data('.');
-			delay_milli(1);
-			Lcd_Data('.');
-			delay_milli(1);
-			delay_milli(500);
-	}
-else
-		continue;	
-}
 }

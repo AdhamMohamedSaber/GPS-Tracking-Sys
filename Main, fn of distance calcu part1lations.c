@@ -1,3 +1,14 @@
+#include <stdio.h>
+#include "tm4c123gh6pm.h"
+#include <math.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define no_of_points 200
+#define M_PI 3.14159265358979323846
+#define rad 6371
+ 
 double lon = 0;
 double lat = 0;
 volatile double prev_lat = 0;

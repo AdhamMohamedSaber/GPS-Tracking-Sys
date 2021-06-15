@@ -29,73 +29,78 @@ void PORTF_Int(void)
     SYSCTL_RCGCGPIO_R |= 0x20;
     while(!(SYSCTL_PRGPIO_R & 0x20));
     GPIO_PORTF_LOCK_R = 0x4C4F434B;
-    GPIO_PORTF_CR_R |= 0x02;
-    GPIO_PORTF_DIR_R |= 0x02;
-    GPIO_PORTF_DEN_R |= 0x02;
-    GPIO_PORTF_AMSEL_R &= ~0x02;
-    GPIO_PORTF_AFSEL_R &= ~0x02;
-    GPIO_PORTF_PCTL_R &= ~0xF0;
-    GPIO_PORTF_DATA_R |= 0x02;
+    GPIO_PORTF_CR_R |= 0x06;
+    GPIO_PORTF_DIR_R |= 0x06;
+    GPIO_PORTF_DEN_R |= 0x06;
+    GPIO_PORTF_AMSEL_R &= ~0x06;
+    GPIO_PORTF_AFSEL_R &= ~0x06;
+    GPIO_PORTF_PCTL_R &= ~0xFF0;
+    GPIO_PORTF_DATA_R |= 0x04;
 	}
 
-void UART2_Init(void)
+void UART5_Init(void)
 	{
-    SYSCTL_RCGCUART_R |= 0x04;
-//    while((SYSCTL_PRUART_R & 0x04) == 0);
-    SYSCTL_RCGCGPIO_R |= 0x08;
-		while((SYSCTL_PRGPIO_R & 0x08) == 0){};
+    SYSCTL_RCGCUART_R |= 0x20;
+//    while((SYSCTL_PRUART_R & 0x20) == 0);
+    SYSCTL_RCGCGPIO_R |= 0x10;
+		while((SYSCTL_PRGPIO_R & 0x10) == 0){};
+		delay_milli(100);
 	
-	  GPIO_PORTD_LOCK_R = 0x4C4F434B;
-	  GPIO_PORTD_CR_R |= 0xFF;
-    GPIO_PORTD_AMSEL_R &= ~0xC0;
-    GPIO_PORTD_AFSEL_R |= 0xC0;
-    GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R & 0x00FFFFFF) + 0x11000000;
-    GPIO_PORTD_DEN_R |= 0xC0;
+//	  GPIO_PORTE_LOCK_R = 0x4C4F434B;    // PE4 RX and PE5 TX
+	  GPIO_PORTE_CR_R |= 0xFF;
+    GPIO_PORTE_AMSEL_R &= ~0x30;
+    GPIO_PORTE_AFSEL_R |= 0x30;
+    GPIO_PORTE_PCTL_R = (GPIO_PORTE_PCTL_R & 0xFF00FFFF) + 0x00110000;
+    GPIO_PORTE_DEN_R |= 0x30;
     
-    UART2_CTL_R &= ~0x00000001;
-    UART2_IBRD_R = 104;
-    UART2_FBRD_R = 11;
-	  UART2_LCRH_R = 0x00000070;
-    UART2_CTL_R |= 0x00000301;
+    UART5_CTL_R &= ~0x00000001;
+    UART5_IBRD_R = 104;
+    UART5_FBRD_R = 11;
+	  UART5_LCRH_R = (UART_LCRH_WLEN_8 | UART_LCRH_FEN);
+    UART5_CTL_R |= 0x00000301;
 	}
-
-char UART2_InChar(void)
-	{
-     while ((UART2_FR_R & 0x00000010) != 0);
-		 return ((char) (UART2_DR_R & 0xFF));
-	}
-
-void UART2_GetData(char *data, int len)
-	{
-     char character;
-	   int i;
-	   for (i = 0; i < len; i++) {
-		     character = UART2_InChar();
-			   data[i] = character;
-		
-		 }
-	}
-
-//double haversine(double lat1, double lon1, double lat2, double lon2)
+	
+//void UART2_Init(void)
 //	{
-//				volatile double a, c, z;
-//        // distance between latitudes
-//        // and longitudes
-//				volatile double dLat = (lat2 - lat1) * M_PI / 180.0;
-//        volatile double dLon = (lon2 - lon1) * M_PI / 180.0;
-// 
-//        // convert to radians
-//        lat1 = (lat1) * M_PI / 180.0;
-//        lat2 = (lat2) * M_PI / 180.0;
-// 
-//        // apply formulae
-//        a = pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(lat1) * cos(lat2);
-//        c = 2 * asin(sqrt(a));
-//        
-//				z = rad* c* pow(10,3);
-//				
-//				return z;
+//    SYSCTL_RCGCUART_R |= 0x04;
+////    while((SYSCTL_PRUART_R & 0x04) == 0);
+//    SYSCTL_RCGCGPIO_R |= 0x08;
+//		while((SYSCTL_PRGPIO_R & 0x08) == 0){};
+//		delay_milli(100);
+//	
+//	  GPIO_PORTD_LOCK_R = 0x4C4F434B;
+//	  GPIO_PORTD_CR_R |= 0xFF;
+//    GPIO_PORTD_AMSEL_R &= ~0xC0;
+//    GPIO_PORTD_AFSEL_R |= 0xC0;
+//    GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R & 0x00FFFFFF) + 0x11000000;
+//    GPIO_PORTD_DEN_R |= 0xC0;
+//    
+//    UART2_CTL_R &= ~0x00000001;
+//    UART2_IBRD_R = 104;
+//    UART2_FBRD_R = 11;
+//	  UART2_LCRH_R = 0x00000070;
+//    UART2_CTL_R |= 0x00000301;
 //	}
+/////////////////////////// CHANGE THE UART NO. OF THE FN BELOW//////////////////////////////
+char UART5_InChar(void)
+	{                                              // 7    6    5     4
+     while ((UART5_FR_R & 0x00000010) != 0); 		// TXFE RXFF TXFF RXFE
+		//PORTF_Int();
+		return ((char) (UART5_DR_R & 0xFF));
+		
+	}
+
+//void UART2_GetData(char *data, int len)
+//	{
+//     char character;
+//	   int i;
+//	   for (i = 0; i < len; i++) {
+//		     character = UART2_InChar();
+//			   data[i] = character;
+//		
+//		 }
+//	}
+
 double deg2rad(double);
 double rad2deg(double);
 
@@ -131,7 +136,37 @@ double deg2rad(double deg) {
 double rad2deg(double radi) {
   return (radi * 180 / M_PI);}
 	
+
+void UART0_INT(void){  // WORKING ON PORT A
+	SYSCTL_RCGCUART_R |= 0x01;
+	SYSCTL_RCGCGPIO_R |= 0x01;
+	                        //           9  8             0
+	UART0_CTL_R &= ~0x01;  // CTL       TX RX            EN
+	// LET THE BR IS 9600/16MHZ
+	UART0_IBRD_R = 104;
+	UART0_FBRD_R = 11;
+	UART0_LCRH_R = 0x70;
+	//(UART_LCRH_WLEN_8 | UART_LCRH_FEN);
+	UART0_CTL_R |= 0x301;
 	
+	GPIO_PORTA_AFSEL_R |= 0x03;   
+	GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R & 0xFFFFFF00) + 0x00000011;
+	GPIO_PORTA_DEN_R |= 0x03;
+	GPIO_PORTA_DIR_R |= 0x01;
+	GPIO_PORTA_AMSEL_R &=~ 0x03;
+}
+
+char UART0_READING (void){
+	
+	while ((UART0_FR_R & 0x00000010) != 0);   // WAIT UNTIL RXFE BE 0
+	return (char)(UART0_DR_R & 0x000000FF); 
+}
+
+void UART0_WRITING (uint8_t data){
+	while ((UART0_FR_R & 0x20) != 0);  // WAIT UNTIL TXFF BE 0
+	UART0_DR_R = data;
+}
+
 void gps_data2(double *lat, double *lon)
 {	
 	char lat_degree[4];
@@ -139,40 +174,65 @@ void gps_data2(double *lat, double *lon)
 	char lat_min[7];
 	char long_min[7];
 	double lat_degrees ,long_degrees, lat_minutes, long_minutes;
-		
-	while(1){
-	while(UART2_InChar() != '$')
-	while(UART2_InChar() != 'G')
-	while(UART2_InChar() != 'P')
-	while(UART2_InChar() != 'R')
-	while(UART2_InChar() != 'M')
-	while(UART2_InChar() != 'C')
-	while(UART2_InChar() != ',')
-	while(UART2_InChar() != 'A' || UART2_InChar() != 'V'){
-	if(UART2_InChar() == 'V')
-		continue;
-	else
-		while(UART2_InChar() != ','){};
-		while(UART2_InChar() == ','){};
-		UART2_GetData(data , 22);
-		lat_degree[0] = data[0];
-		lat_degree[1] = data[1];
-		lat_min[0] = data[2];
-		lat_min[1] = data[3];
-		lat_min[2] = data[5];
-		lat_min[3] = data[6];
-		lat_min[4] = data[7];
-		lat_min[5] = data[8];
+	int x;
+//	do{
+//	while(UART2_InChar() != '$')
+//	while(UART2_InChar() != 'G')
+//	while(UART2_InChar() != 'P')
+//	while(UART2_InChar() != 'R')
+//	while(UART2_InChar() != 'M')
+//	while(UART2_InChar() != 'C')
+//	while(UART2_InChar() != ',')
+//	while(UART2_InChar() != 'A' || UART2_InChar() != 'V');
+// }while(UART2_InChar() == 'V');
 
-		long_degree[0] = data[12];
-		long_degree[1] = data[13];
-		long_degree[2] = data[14];
-		long_min[0] = data[15];
-		long_min[1] = data[16];
-		long_min[2] = data[18];
-		long_min[3] = data[19];
-		long_min[4] = data[20];
-		long_min[5] = data[21];
+
+//	while(UART2_InChar() != ',')
+//	while(UART2_InChar() == ',')
+//  UART2_GetData(data , 22);
+/////////////////////////CHANGE THE UART NO. OF THE FN BELOW//////////////////////////////
+while(1){
+	if((UART5_FR_R & 0x00000010) != 0)
+    {//PORTF_Int();
+    if(UART5_InChar() == '$')
+      {UART0_WRITING(UART5_InChar());
+       if(UART5_InChar() == 'G')
+					{
+          if(UART5_InChar() == 'P')
+            {
+             if(UART5_InChar() == 'R')
+               {
+                if(UART5_InChar() == 'M')
+                   {
+										if(UART5_InChar() == 'C')
+											{
+											 if(UART5_InChar() == ',')
+												{  
+															for(x=0; x<40; x++)
+															{ data[x] = UART5_InChar();
+																
+																if (data[x] == '\r' || data[x] == '\n' || data[x] == 'V'){
+																	break;
+}}}}}}}}}}}
+	
+	lat_degree[0] = data[14];
+	lat_degree[1] = data[15];
+	lat_min[0] = data[16];
+	lat_min[1] = data[17];
+	lat_min[2] = data[19];
+	lat_min[3] = data[20];
+	lat_min[4] = data[21];
+	lat_min[5] = data[22];
+
+	long_degree[0] = data[26];
+	long_degree[1] = data[27];
+	long_degree[2] = data[28];
+	long_min[0] = data[29];
+	long_min[1] = data[30];
+	long_min[2] = data[32];
+	long_min[3] = data[33];
+	long_min[4] = data[34];
+	long_min[5] = data[35];
 		
 		lat_degrees = atof (lat_degree);
 		long_degrees = atof (long_degree);
@@ -182,113 +242,9 @@ void gps_data2(double *lat, double *lon)
 		*lat = lat_minutes / (1000 * 60);
 		*lon = long_minutes / (1000 * 60);
 		*lat = *lat + lat_degrees ; 
-		*lon = *lon + long_degrees ;
-		break;
-	}
-		break;
-	}
+		*lon = *lon + long_degrees ; 
 }
-//	while(UART2_InChar() != ',')
-//  UART2_GetData(data , 22);
-//	lat_degree[0] = data[0];
-//	lat_degree[1] = data[1];
-//	lat_min[0] = data[2];
-//	lat_min[1] = data[3];
-//	lat_min[2] = data[5];
-//	lat_min[3] = data[6];
-//	lat_min[4] = data[7];
-//	lat_min[5] = data[8];
 
-//	long_degree[0] = data[12];
-//	long_degree[1] = data[13];
-//	long_degree[2] = data[14];
-//	long_min[0] = data[15];
-//	long_min[1] = data[16];
-//	long_min[2] = data[18];
-//	long_min[3] = data[19];
-//	long_min[4] = data[20];
-//	long_min[5] = data[21];
-//		
-//		lat_degrees = atof (lat_degree);
-//		long_degrees = atof (long_degree);
-//		lat_minutes = atof (lat_min);
-//		long_minutes = atof (long_min);
-//		
-//		*lat = lat_minutes / (1000 * 60);
-//		*lon = long_minutes / (1000 * 60);
-//		*lat = *lat + lat_degrees ; 
-//		*lon = *lon + long_degrees ; 
-//}
-
-//void gps_data (double *lat, double *lon)
-//{
-//		char cursor = '$';
-//		int i = 0;
-//		char lat_degree[4];
-//		char long_degree[4];
-//		char lat_min[7];
-//		char long_min[7];
-//		
-//		const char *str ;
-//		double x ;
-//		//printf ("lat_degree = %f\n", x);
-//		const char *str1 ;
-//		double y ;
-//		//printf ("long_degree = %f\n", y);
-//		const char *str2 ;
-//		double z ;
-//		//printf ("lat_min = %f\n", z);
-//		const char *str3;
-//		double a;
-//		//printf ("long_min = %f\n", a);
-//		
-//		while (1)
-//			{
-//				if (cursor == 'C')
-//					{
-//						lat_degree[0] = data[i + 14];
-//						lat_degree[1] = data[i + 15];
-//						lat_min[0] = data[i + 16];
-//						lat_min[1] = data[i + 17];
-//						lat_min[2] = data[i + 19];
-//						lat_min[3] = data[i + 20];
-//						lat_min[4] = data[i + 21];
-//						lat_min[5] = data[i + 22];
-
-//						long_degree[0] = data[i + 26];
-//						long_degree[1] = data[i + 27];
-//						long_degree[2] = data[i + 28];
-//						long_min[0] = data[i + 29];
-//						long_min[1] = data[i + 30];
-//						long_min[2] = data[i + 32];
-//						long_min[3] = data[i + 33];
-//						long_min[4] = data[i + 34];
-//						long_min[5] = data[i + 35];
-//						break;
-//					}
-//					cursor = data[i];
-//					i++;
-//			}
-//		str = lat_degree;
-//		x = strtod (str, NULL);
-//		//printf ("lat_degree = %f\n", x);
-//		str1 = long_degree;
-//		y = strtod (str1, NULL);
-//		//printf ("long_degree = %f\n", y);   	 atof
-//		str2 = lat_min;
-//		z = strtod (str2, NULL);
-//		//printf ("lat_min = %f\n", z);
-//		str3 = long_min;
-//		a = strtod (str3, NULL);
-//		//printf ("long_min = %f\n", a);
-//  
-//		*lat = z / (1000 * 60);
-//		*lon = a / (1000 * 60);
-//		*lat = *lat + x ; //may cause error (try removing *)
-//		*lon = *lon + y ; 
-//		//printf("lat is %f\n ", lat);
-//		//printf("lon is %f\n ", lon);
-//			}
 
 void Lcd_Data(char data)
 {
@@ -310,8 +266,7 @@ void Lcd_command(char com)
 void LCD_INIT(void)
 {
     SYSCTL_RCGCGPIO_R|=0x03;
-    while ((SYSCTL_PRGPIO_R&0x03 )==0)
-		{}
+   while ((SYSCTL_PRGPIO_R&0x03 )==0){}
 //  LCD_COMMAND
     GPIO_PORTA_DIR_R=0xE0;
     GPIO_PORTA_DATA_R &=0x1F;
@@ -348,26 +303,27 @@ volatile double prev_lat = 0;
 int main (void)
 {
   char  buf[3];
+	int counter;
 	int distancex = 0;
-volatile	int i =0 ;
+	volatile	int i =0 ;
 	
-  UART2_Init();
+	UART0_INT ();
+  UART5_Init();
 	LCD_INIT();
-//	haversine(30.10527,31.31637,30.10522,31.31657,'K');
+	
+//	distance = haversine(30.10527,30.10522,31.31637,31.31657,'K');
 //	delay_milli(100);
 
 	
- while(1) {
+while(1) {
 				// LCD reading
 
-//			UART2_GetData(data, len); //comment
-//				delay_milli(10);
 		  gps_data2 (&lat, &lon);
       if (prev_lat != 0 && prev_lon != 0)
 				{
 					distance += haversine(prev_lat, prev_lon, lat, lon,'K');
 				}
-			if (distance >= 100) PORTF_Int(); //Light Red LED ON
+//			if (distance >= 100) PORTF_Int(); //Light Red LED ON
 
       prev_lat = lat;
       prev_lon = lon;
@@ -395,17 +351,17 @@ volatile	int i =0 ;
 				Lcd_Data('=');
 				delay_milli(1);
 			
-		
-			Lcd_Data(buf[0]);
+	for(counter= 0; counter < 3; counter++){		
+			Lcd_Data(buf[counter]);
 			delay_milli(1);
-			Lcd_Data(buf[1]);
-			delay_milli(1);
-			Lcd_Data(buf[2]);
-			delay_milli(1);
+	}
 			Lcd_Data('m');
 			delay_milli(1);
-			Lcd_Data(' ');
+			Lcd_Data('.');
+			delay_milli(1);
+			Lcd_Data('.');
 			delay_milli(1);
 			delay_milli(500);
-		}
-	}
+			
+}
+}
